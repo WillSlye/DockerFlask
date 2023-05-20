@@ -3,9 +3,17 @@ import sqlite3
 
 app = Flask(__name__)
 
+def create_table():
+    conn = sqlite3.connect('logs.db')
+    c = conn.cursor()
+    c.execute("CREATE TABLE IF NOT EXISTS logs (endpoint TEXT)")
+    conn.commit()
+    conn.close()
+
 @app.route('/microservice')
 def microservice():
     # Log the microservice call to the database
+    create_table()
     log_to_database('/microservice')
 
     return 'Microservice endpoint'
